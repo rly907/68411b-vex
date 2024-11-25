@@ -9,13 +9,16 @@ int speed = 1;
  * "I was pressed!" and nothing.
  */
 void on_left_button() {
-	speed = speed - 0.25;
+	speed = speed - 0.10;
 	pros::lcd::print(0, "Speed down");
 }
 
 void on_right_button() {
-	speed = speed + 0.25;
+	speed = speed + 0.10;
 	pros::lcd::print(0, "Speed up");
+}
+void on_center_button(){
+	// pros::lcd::print(0, std::to_string(speed));
 }
 
 /**
@@ -31,6 +34,7 @@ void initialize() {
 
 	pros::lcd::register_btn0_cb(on_left_button);
 	pros::lcd::register_btn2_cb(on_right_button);
+	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
