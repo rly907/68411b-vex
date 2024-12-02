@@ -18,6 +18,8 @@ void on_right_button() {
 	pros::lcd::print(0, "Speed up");
 }
 void on_center_button(){
+	std::string speedStr = "Speed: ";
+	speedStr.append(std::to_string(speed));
 	// pros::lcd::print(0, std::to_string(speed));
 }
 
