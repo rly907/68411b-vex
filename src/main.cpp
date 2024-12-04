@@ -85,18 +85,31 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::MotorGroup left_mg({10 , 20});    // Creates a motor group with forwards ports 1 & 3 and reversed port 2
-	pros::MotorGroup right_mg({1 , 11});  // Creates a motor group with forwards port 5 and reversed ports 4 & 6
+	pros::Motor front_left (10);
+	pros::Motor back_left (20);
+	pros::Motor front_right (1);
+	pros::Motor back_right (11);
+
+	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
+	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 	
 
 	while (true) {
 	
 
-		// Arcade control scheme
-		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets amount forward/backward from left joystick
-		int right = -1 * speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the turn left/right from right joystick
-		left_mg.move(left);                      // Sets left motor voltage
-		right_mg.move(right);                     // Sets right motor voltage
-		pros::delay(20);                               // Run for 20 ms then update
+		// Motor Temperature Warning
+		if (front_left.is_over_temp() || back_left.is_over_temp()){
+			master.print(0,0,"Left motor overheat");
+		}
+		if (front_right.is_over_temp() || back_right.is_over_temp()){
+			master.print(0,0,"Right motor overheat");
+		}
+
+		// Tank Drive
+		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
+		int right = -1 * speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the right joystick data and drives the motors
+		left_mg.move(left);	// Sets left motor voltage
+		right_mg.move(right);	// Sets right motor voltage
+		pros::delay(20);	// Run for 20 ms then update
 	}
 }
