@@ -112,4 +112,5 @@ void opcontrol() {
 		right_mg.move(right);	// Sets right motor voltage
 		pros::delay(20);	// Run for 20 ms then update
 	}
+	
 }
