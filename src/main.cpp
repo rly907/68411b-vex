@@ -100,14 +100,14 @@ void opcontrol() {
 	
 
 		// Motor Temperature Warning
-		/*
-		if (front_left.is_over_temp() || back_left.is_over_temp()){
-			master.print(0,0,"Left motor overheat");
+		
+		if (left_mg.is_over_temp()){
+			master.print(0,0,"Left motor warning");
 		}
-		if (front_right.is_over_temp() || back_right.is_over_temp()){
-			master.print(0,0,"Right motor overheat");
+		if (right_mg.is_over_temp()){
+			master.print(0,0,"Right motor warning");
 		}
-		*/
+		
 		
 
 		// Tank Drive
