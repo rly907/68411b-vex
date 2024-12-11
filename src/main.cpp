@@ -85,25 +85,30 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	/*
 	pros::Motor front_left (10);
 	pros::Motor back_left (20);
 	pros::Motor front_right (1);
 	pros::Motor back_right (11);
+	*/
 
-	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
-	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
+	pros::MotorGroup left_mg ({10, 20});    // Creates a motor group with forwards ports 10 and 20
+	pros::MotorGroup right_mg ({1, 11});  // Creates a motor group with forwards port 1 and 11
 	
 
 	while (true) {
 	
 
 		// Motor Temperature Warning
+		/*
 		if (front_left.is_over_temp() || back_left.is_over_temp()){
 			master.print(0,0,"Left motor overheat");
 		}
 		if (front_right.is_over_temp() || back_right.is_over_temp()){
 			master.print(0,0,"Right motor overheat");
 		}
+		*/
+		
 
 		// Tank Drive
 		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
