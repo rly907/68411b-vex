@@ -34,8 +34,8 @@ void initialize() {
 
 	pros::lcd::print(0, "Init Done!");
 
-	pros::lcd::register_btn0_cb(on_left_button);
-	pros::lcd::register_btn2_cb(on_right_button);
+	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
 	pros::lcd::register_btn1_cb(on_center_button);
 }
 
@@ -100,14 +100,14 @@ void opcontrol() {
 	
 
 		// Motor Temperature Warning
-		/*
-		if (front_left.is_over_temp() || back_left.is_over_temp()){
-			master.print(0,0,"Left motor overheat");
+		
+		if (left_mg.is_over_temp()){
+			master.print(0,0,"Left motor warning");
 		}
-		if (front_right.is_over_temp() || back_right.is_over_temp()){
-			master.print(0,0,"Right motor overheat");
+		if (right_mg.is_over_temp()){
+			master.print(0,0,"Right motor warning");
 		}
-		*/
+		
 		
 
 		// Tank Drive
