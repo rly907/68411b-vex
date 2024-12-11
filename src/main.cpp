@@ -1,5 +1,10 @@
 #include "main.h"
 
+#define front_left 10
+#define back_left 20
+#define front_right -1
+#define back_right -11
+
 int speed = 1;
 
 /**
@@ -92,8 +97,8 @@ void opcontrol() {
 	pros::Motor back_right (11);
 	*/
 
-	pros::MotorGroup left_mg ({10, 20});    // Creates a motor group with forwards ports 10 and 20
-	pros::MotorGroup right_mg ({1, 11});  // Creates a motor group with forwards port 1 and 11
+	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
+	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 	
 
 	while (true) {
@@ -101,10 +106,10 @@ void opcontrol() {
 
 		// Motor Temperature Warning
 		
-		if (left_mg.is_over_temp()){
+		if (left_mg.is_over_temp() || left_mg.is_over_current()){
 			master.print(0,0,"Left motor warning");
 		}
-		if (right_mg.is_over_temp()){
+		if (right_mg.is_over_temp() || right_mg.is_over_current()){
 			master.print(0,0,"Right motor warning");
 		}
 		
@@ -112,7 +117,7 @@ void opcontrol() {
 
 		// Tank Drive
 		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
-		int right = -1 * speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the right joystick data and drives the motors
+		int right = speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the right joystick data and drives the motors
 		left_mg.move(left);	// Sets left motor voltage
 		right_mg.move(right);	// Sets right motor voltage
 		pros::delay(20);	// Run for 20 ms then update
