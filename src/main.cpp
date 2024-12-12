@@ -1,31 +1,37 @@
 #include "main.h"
+#include "pros/llemu.hpp"
 
 #define front_left 10
 #define back_left 20
 #define front_right -1
 #define back_right -11
 
-int speed = 1;
+double speed = 1;
 
 /**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
+ * New code to set speed variable
+ * Center button prints current speed var
+ * 
+ * Thanks LLEMU
  */
 void on_left_button() {
 	speed = speed - 0.10;
 	pros::lcd::print(0, "Speed down");
+	// printf ("left");
 }
 
 void on_right_button() {
 	speed = speed + 0.10;
 	pros::lcd::print(0, "Speed up");
+	// printf ("right");
 }
 void on_center_button(){
 	std::string speedStr = "Speed: ";
 	speedStr.append(std::to_string(speed));
-	// pros::lcd::print(0, std::to_string(speed));
+	pros::lcd::set_text(0, speedStr);
+	// printf ("middle");
+	// pros::lcd::print(0, "middle");
+	
 }
 
 /**
@@ -42,6 +48,8 @@ void initialize() {
 	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
 	pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
 	pros::lcd::register_btn1_cb(on_center_button);
+
+
 }
 
 /**
@@ -104,7 +112,7 @@ void opcontrol() {
 	while (true) {
 	
 
-		// Motor Temperature Warning
+		// Motor Temperature & Current Warning
 		
 		if (left_mg.is_over_temp() || left_mg.is_over_current()){
 			master.print(0,0,"Left motor warning");
