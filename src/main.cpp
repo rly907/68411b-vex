@@ -47,8 +47,15 @@ void initialize() {
 
 	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
 	pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
-	pros::lcd::register_btn1_cb(on_center_button);
+	pros::lcd::register_btn1_cb(on_center_button); // this one doesnt throw an error. all 3 work but i might change this later :3
+	// i could make like a switch type thing but it would need to go in op control. 
 
+	// Motor Group Initiliazation
+
+	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
+	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
+
+	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 
 }
 
@@ -97,18 +104,8 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	/*
-	pros::Motor front_left (10);
-	pros::Motor back_left (20);
-	pros::Motor front_right (1);
-	pros::Motor back_right (11);
-	*/
-
-	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
-	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 	
-
+	
 	while (true) {
 	
 
