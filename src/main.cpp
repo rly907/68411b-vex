@@ -25,7 +25,7 @@ void on_right_button() {
 	pros::lcd::print(0, "Speed up");
 	// printf ("right");
 }
-void on_center_button(){ hehea
+void on_center_button(){
 	std::string speedStr = "Speed: ";
 	speedStr.append(std::to_string(speed));
 	pros::lcd::set_text(0, speedStr);
@@ -52,10 +52,7 @@ void initialize() {
 
 	// Motor Group Initiliazation
 
-	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
-	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
-
-	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
+	
 
 }
 
@@ -104,6 +101,10 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
+	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
+
+	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	
 	while (true) {
