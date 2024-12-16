@@ -25,7 +25,7 @@ void on_right_button() {
 	pros::lcd::print(0, "Speed up");
 	// printf ("right");
 }
-void on_center_button(){
+void on_center_button(){ hehea
 	std::string speedStr = "Speed: ";
 	speedStr.append(std::to_string(speed));
 	pros::lcd::set_text(0, speedStr);
