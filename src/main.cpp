@@ -1,26 +1,37 @@
 #include "main.h"
+#include "pros/llemu.hpp"
 
-int speed = 1;
+#define front_left 10
+#define back_left 20
+#define front_right -1
+#define back_right -11
+
+double speed = 1;
 
 /**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
+ * New code to set speed variable
+ * Center button prints current speed var
+ * 
+ * Thanks LLEMU
  */
 void on_left_button() {
 	speed = speed - 0.10;
 	pros::lcd::print(0, "Speed down");
+	// printf ("left");
 }
 
 void on_right_button() {
 	speed = speed + 0.10;
 	pros::lcd::print(0, "Speed up");
+	// printf ("right");
 }
 void on_center_button(){
 	std::string speedStr = "Speed: ";
 	speedStr.append(std::to_string(speed));
-	// pros::lcd::print(0, std::to_string(speed));
+	pros::lcd::set_text(0, speedStr);
+	// printf ("middle");
+	// pros::lcd::print(0, "middle");
+	
 }
 
 /**
@@ -34,9 +45,15 @@ void initialize() {
 
 	pros::lcd::print(0, "Init Done!");
 
-	pros::lcd::register_btn0_cb(on_left_button);
-	pros::lcd::register_btn2_cb(on_right_button);
-	pros::lcd::register_btn1_cb(on_center_button);
+	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	pros::lcd::register_btn1_cb(on_center_button); // this one doesnt throw an error. all 3 work but i might change this later :3
+	// i could make like a switch type thing but it would need to go in op control. 
+
+	// Motor Group Initiliazation
+
+	
+
 }
 
 /**
@@ -84,35 +101,29 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	/*
-	pros::Motor front_left (10);
-	pros::Motor back_left (20);
-	pros::Motor front_right (1);
-	pros::Motor back_right (11);
-	*/
+	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
+	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 
-	pros::MotorGroup left_mg ({10, 20});    // Creates a motor group with forwards ports 10 and 20
-	pros::MotorGroup right_mg ({1, 11});  // Creates a motor group with forwards port 1 and 11
+	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
-
+	
 	while (true) {
 	
 
-		// Motor Temperature Warning
-		/*
-		if (front_left.is_over_temp() || back_left.is_over_temp()){
-			master.print(0,0,"Left motor overheat");
+		// Motor Temperature & Current Warning
+		
+		if (left_mg.is_over_temp() || left_mg.is_over_current()){
+			master.print(0,0,"Left motor warning");
 		}
-		if (front_right.is_over_temp() || back_right.is_over_temp()){
-			master.print(0,0,"Right motor overheat");
+		if (right_mg.is_over_temp() || right_mg.is_over_current()){
+			master.print(0,0,"Right motor warning");
 		}
-		*/
+		
 		
 
 		// Tank Drive
 		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
-		int right = -1 * speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the right joystick data and drives the motors
+		int right = speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the right joystick data and drives the motors
 		left_mg.move(left);	// Sets left motor voltage
 		right_mg.move(right);	// Sets right motor voltage
 		pros::delay(20);	// Run for 20 ms then update
