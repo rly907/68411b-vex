@@ -1,10 +1,12 @@
 #include "main.h"
 #include "pros/llemu.hpp"
 
-#define front_left 10
-#define back_left 20
-#define front_right -1
-#define back_right -11
+#define front_left 19
+#define back_left 11
+#define front_right -20
+#define back_right -12
+
+#define belt_port -13
 
 double speed = 1;
 
@@ -104,6 +106,8 @@ void opcontrol() {
 	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
 	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 
+	pros::Motor belt (belt_port);
+
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	
@@ -112,12 +116,17 @@ void opcontrol() {
 
 		// Motor Temperature & Current Warning
 		
-		if (left_mg.is_over_temp() || left_mg.is_over_current()){
-			master.print(0,0,"Left motor warning");
+		
+		if (master.get_digital(DIGITAL_A))
+		{
+			belt.move(85);
 		}
-		if (right_mg.is_over_temp() || right_mg.is_over_current()){
-			master.print(0,0,"Right motor warning");
+		else
+		{
+			belt.move(0);
 		}
+		
+		
 		
 		
 
