@@ -8,6 +8,8 @@
 
 #define belt_port -13
 
+#define intake_port 18
+
 double speed = 1;
 
 /**
@@ -107,10 +109,12 @@ void opcontrol() {
 	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 
 	pros::Motor belt (belt_port);
+	pros::Motor intake (intake_port);
 
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
-	
+	intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+
 	while (true) {
 	
 
@@ -119,16 +123,26 @@ void opcontrol() {
 		
 		if (master.get_digital(DIGITAL_A))
 		{
-			belt.move(85);
+			belt.move(65);
 		}
 		else
 		{
 			belt.move(0);
 		}
-		
-		
-		
-		
+
+
+		if (master.get_digital(DIGITAL_R2))
+		{
+			intake.move(-127);
+		}
+		else if (master.get_digital(DIGITAL_R1))
+		{
+			intake.move(127);
+		}
+		else
+		{
+			intake.move(0);
+		}
 
 		// Tank Drive
 		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
