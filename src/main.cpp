@@ -121,9 +121,13 @@ void opcontrol() {
 		// Motor Temperature & Current Warning
 		
 		
-		if (master.get_digital(DIGITAL_A))
+		if (master.get_digital(DIGITAL_L2))
 		{
-			belt.move(65);
+			belt.move(85);
+		}
+		else if (master.get_digital(DIGITAL_L1))
+		{
+			belt.move(-85);
 		}
 		else
 		{
