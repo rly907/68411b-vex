@@ -17,7 +17,11 @@ double speed = 1;
  * Center button prints current speed var
  * 
  * Thanks LLEMU
+ * 
+ * commented out becuase it was not necessary to keep
  */
+
+/*
 void on_left_button() {
 	speed = speed - 0.10;
 	pros::lcd::print(0, "Speed down");
@@ -37,6 +41,7 @@ void on_center_button(){
 	// pros::lcd::print(0, "middle");
 	
 }
+*/
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -49,10 +54,10 @@ void initialize() {
 
 	pros::lcd::print(0, "Init Done!");
 
-	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
-	pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
-	pros::lcd::register_btn1_cb(on_center_button); // this one doesnt throw an error. all 3 work but i might change this later :3
-	// i could make like a switch type thing but it would need to go in op control. 
+	//pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	//pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	//pros::lcd::register_btn1_cb(on_center_button); // this one doesnt throw an error. all 3 work but i might change this later :3
+	
 
 	// Motor Group Initiliazation
 
@@ -115,15 +120,14 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	net_intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	
 	net_intake.set_gearing(pros::E_MOTOR_GEAR_RED);
 
 	while (true) {
-	
 
-		// Motor Temperature & Current Warning
-		
-		
+		//idk if needs to be in the loop or outside
+		net_intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
 		if (master.get_digital(DIGITAL_L2))
 		{
 			belt.move(85);
@@ -153,11 +157,11 @@ void opcontrol() {
 
 		if (master.get_digital(DIGITAL_A))
 		{
-			net_intake.move(25);
+			net_intake.move(127);
 		}
 		else if (master.get_digital(DIGITAL_B))
 		{
-			net_intake.move(-25);
+			net_intake.move(-127);
 		}
 		else
 		{
