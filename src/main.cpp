@@ -7,7 +7,7 @@
 #define back_right -12
 
 #define belt_port -13
-
+#define net_port 14
 #define intake_port 18
 
 double speed = 1;
@@ -110,10 +110,13 @@ void opcontrol() {
 
 	pros::Motor belt (belt_port);
 	pros::Motor intake (intake_port);
+	pros::Motor net_intake (net_port);
 
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	net_intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	net_intake.set_gearing(pros::E_MOTOR_GEAR_RED);
 
 	while (true) {
 	
@@ -146,6 +149,19 @@ void opcontrol() {
 		else
 		{
 			intake.move(0);
+		}
+
+		if (master.get_digital(DIGITAL_A))
+		{
+			net_intake.move(25);
+		}
+		else if (master.get_digital(DIGITAL_B))
+		{
+			net_intake.move(-25);
+		}
+		else
+		{
+			net_intake.move(0);
 		}
 
 		// Tank Drive
