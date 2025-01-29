@@ -10,6 +10,8 @@
 #define net_port 14
 #define intake_port 18
 
+
+
 double speed = 1;
 
 /**
@@ -110,6 +112,9 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+
+	pros::adi::Pneumatics left_piston('h', true); 
+
 	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
 	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 
@@ -166,6 +171,15 @@ void opcontrol() {
 		else
 		{
 			net_intake.move(0);
+		}
+
+		if (master.get_digital(DIGITAL_X))
+		{
+			left_piston.extend();
+		}
+		else if (master.get_digital(DIGITAL_Y))
+		{
+			left_piston.retract();
 		}
 
 		// Tank Drive
