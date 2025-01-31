@@ -7,7 +7,6 @@
 #define back_right -12
 
 #define belt_port -13
-#define net_port 14
 #define intake_port 18
 
 
@@ -113,25 +112,22 @@ void autonomous() {}
  */
 void opcontrol() {
 
-	pros::adi::Pneumatics left_piston('h', true); 
+	pros::adi::Pneumatics net_piston('h', true); 
 
 	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
 	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
 
 	pros::Motor belt (belt_port);
 	pros::Motor intake (intake_port);
-	pros::Motor net_intake (net_port);
 
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	
-	net_intake.set_gearing(pros::E_MOTOR_GEAR_RED);
 
 	while (true) {
 
-		//idk if needs to be in the loop or outside
-		net_intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+		//MOVE ALL OF THESE INTO FUNCTIONS LATER
 
 		if (master.get_digital(DIGITAL_L2))
 		{
@@ -143,7 +139,7 @@ void opcontrol() {
 		}
 		else
 		{
-			belt.move(0);
+			belt.brake();
 		}
 
 
@@ -157,30 +153,16 @@ void opcontrol() {
 		}
 		else
 		{
-			intake.move(0);
+			intake.brake();
 		}
 
-		if (master.get_digital(DIGITAL_A))
-		{
-			net_intake.move(127);
-		}
-		else if (master.get_digital(DIGITAL_B))
-		{
-			net_intake.move(-127);
-		}
-		else
-		{
-			net_intake.move(0);
-		}
+		
 
 		if (master.get_digital(DIGITAL_X))
 		{
-			left_piston.extend();
+			net_piston.toggle();
 		}
-		else if (master.get_digital(DIGITAL_Y))
-		{
-			left_piston.retract();
-		}
+
 
 		// Tank Drive
 		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
