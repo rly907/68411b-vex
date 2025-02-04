@@ -13,6 +13,39 @@
 
 double speed = 1;
 
+int time = 2000;
+
+void on_left_button() {
+	time = time - 250;
+	pros::lcd::print(0, "Time: %d", time);
+}
+void on_right_button() {
+	time = time + 250;
+	pros::lcd::print(0, "Time: %d", time);
+}
+void on_center_button() {
+	pros::MotorGroup left_mg ({front_left, back_left});
+	pros::MotorGroup right_mg ({front_right, back_right});
+	pros::Motor belt (belt_port);
+	pros::adi::Pneumatics net_piston('h', true); 
+
+	left_mg.move(-127);
+	right_mg.move(-127);
+
+	pros::delay(time);
+
+	left_mg.brake();
+	right_mg.brake();
+
+	pros::delay(250);
+
+	net_piston.toggle();
+
+	pros::delay(250);
+
+	belt.move(85);
+}
+
 
 
 /**
@@ -68,6 +101,7 @@ void competition_initialize() {}
  */
 void autonomous() {
 
+	/*
 	pros::MotorGroup left_mg ({front_left, back_left});
 	pros::MotorGroup right_mg ({front_right, back_right});
 	pros::Motor belt (belt_port);
@@ -88,7 +122,7 @@ void autonomous() {
 	pros::delay(500);
 
 	belt.move(85);
-
+	*/
 
 
 }
