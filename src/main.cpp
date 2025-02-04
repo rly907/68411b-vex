@@ -13,36 +13,7 @@
 
 double speed = 1;
 
-/**
- * New code to set speed variable
- * Center button prints current speed var
- * 
- * Thanks LLEMU
- * 
- * commented out becuase it was not necessary to keep
- */
 
-/*
-void on_left_button() {
-	speed = speed - 0.10;
-	pros::lcd::print(0, "Speed down");
-	// printf ("left");
-}
-
-void on_right_button() {
-	speed = speed + 0.10;
-	pros::lcd::print(0, "Speed up");
-	// printf ("right");
-}
-void on_center_button(){
-	std::string speedStr = "Speed: ";
-	speedStr.append(std::to_string(speed));
-	pros::lcd::set_text(0, speedStr);
-	// printf ("middle");
-	// pros::lcd::print(0, "middle");
-	
-}
-*/
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -95,7 +66,32 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+
+	pros::MotorGroup left_mg ({front_left, back_left});
+	pros::MotorGroup right_mg ({front_right, back_right});
+	pros::Motor belt (belt_port);
+	pros::adi::Pneumatics net_piston('h', true); 
+
+	left_mg.move(-127);
+	right_mg.move(-127);
+
+	pros::delay(2000);
+
+	left_mg.brake();
+	right_mg.brake();
+
+	pros::delay(500);
+
+	net_piston.toggle();
+
+	pros::delay(500);
+
+	belt.move(85);
+
+
+
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -129,11 +125,11 @@ void opcontrol() {
 
 		//MOVE ALL OF THESE INTO FUNCTIONS LATER
 
-		if (master.get_digital(DIGITAL_L2))
+		if (master.get_digital(DIGITAL_R2))
 		{
 			belt.move(85);
 		}
-		else if (master.get_digital(DIGITAL_L1))
+		else if (master.get_digital(DIGITAL_A))
 		{
 			belt.move(-85);
 		}
@@ -143,11 +139,11 @@ void opcontrol() {
 		}
 
 
-		if (master.get_digital(DIGITAL_R2))
+		if (master.get_digital(DIGITAL_R1))
 		{
 			intake.move(-127);
 		}
-		else if (master.get_digital(DIGITAL_R1))
+		else if (master.get_digital(DIGITAL_B))
 		{
 			intake.move(127);
 		}
@@ -158,7 +154,7 @@ void opcontrol() {
 
 		
 
-		if (master.get_digital(DIGITAL_X))
+		if (master.get_digital_new_press(DIGITAL_L2))
 		{
 			net_piston.toggle();
 		}
