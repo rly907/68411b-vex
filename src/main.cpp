@@ -44,6 +44,10 @@ void on_center_button() {
 	pros::delay(250);
 
 	belt.move(85);
+
+	pros::delay(1000);
+
+	belt.brake();
 }
 
 
@@ -186,8 +190,6 @@ void opcontrol() {
 			intake.brake();
 		}
 
-		
-
 		if (master.get_digital_new_press(DIGITAL_L2))
 		{
 			net_piston.toggle();
@@ -197,6 +199,14 @@ void opcontrol() {
 		// Tank Drive
 		int left = speed * master.get_analog(ANALOG_LEFT_Y);    // Gets the left joystick data and drives the motors
 		int right = speed * master.get_analog(ANALOG_RIGHT_Y);  // Gets the right joystick data and drives the motors
+		
+		//might make drive 'snappier' or breaks (brakes) everything
+		left_mg.set_brake_mode_all(pros::E_MOTOR_BRAKE_BRAKE);
+		right_mg.set_brake_mode_all(pros::E_MOTOR_BRAKE_BRAKE);
+		if (master.get_analog(ANALOG_LEFT_Y) == 0){left_mg.brake();}
+		if (master.get_analog(ANALOG_RIGHT_Y) == 0){right_mg.brake();}
+
+
 		left_mg.move(left);	// Sets left motor voltage
 		right_mg.move(right);	// Sets right motor voltage
 		pros::delay(20);	// Run for 20 ms then update
