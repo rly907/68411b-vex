@@ -62,6 +62,9 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 
+	pros::Vision vision_sensor (vision_port);
+	vision_sensor.set_wifi_mode(1);
+
 	pros::lcd::print(0, "Init Done!");
 
 	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
