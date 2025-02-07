@@ -10,12 +10,15 @@
 #define belt_port -13
 #define intake_port 18
 
-#define vision_port 23
 
 double speed = 1;
 
 int i_time = 2000;
 
+
+//code below this is for testing, not fully needed
+
+/*
 void on_left_button() {
 	i_time -= 250;
 	pros::lcd::print(0, "Time: %d", time);
@@ -50,7 +53,7 @@ void on_center_button() {
 
 	belt.brake();
 }
-
+*/
 
 
 /**
@@ -61,15 +64,11 @@ void on_center_button() {
  */
 void initialize() {
 	pros::lcd::initialize();
-
-	pros::Vision vision_sensor (vision_port);
-	vision_sensor.set_wifi_mode(1);
-
 	pros::lcd::print(0, "Init Done!");
 
-	pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
-	pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
-	pros::lcd::register_btn1_cb(on_center_button); // this one doesnt throw an error. all 3 work but i might change this later :3
+	//pros::lcd::register_btn0_cb(on_left_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	//pros::lcd::register_btn2_cb(on_right_button); // THIS THROWS AN ERORR BUT WORKS FINE :)
+	//pros::lcd::register_btn1_cb(on_center_button); // this one doesnt throw an error. all 3 work but i might change this later :3
 	
 
 	// Motor Group Initiliazation
@@ -113,11 +112,13 @@ void autonomous() {
 	pros::MotorGroup right_mg ({front_right, back_right});
 	pros::Motor belt (belt_port);
 	pros::adi::Pneumatics net_piston('h', true); 
+	left_mg.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
+	right_mg.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
 
 	left_mg.move(-127);
 	right_mg.move(-127);
 
-	pros::delay(2000);
+	pros::delay(1000);
 
 	left_mg.brake();
 	right_mg.brake();
@@ -158,8 +159,6 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-
-	pros::Vision vision_sensor(vision_port);
 	
 
 	while (true) {
@@ -167,18 +166,7 @@ void opcontrol() {
 		//MOVE ALL OF THESE INTO FUNCTIONS LATER
 
 		if (master.get_digital(DIGITAL_R2)){
-			pros::vision_object_s_t largest = vision_sensor.get_by_size(0);
-
-			//this may not work maybe change this to something based of codes??? read the docs lmao
-
-			if (largest.signature == 1)
-			{
-				belt.move(127);
-			}
-			else {
-				belt.move(85);
-			}
-				
+			belt.move(85);
 		}
 		else if (master.get_digital(DIGITAL_A)){
 			belt.move(-85);
