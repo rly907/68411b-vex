@@ -1,5 +1,6 @@
 #include "main.h"
 #include "pros/llemu.hpp"
+#include "pros/vision.hpp"
 
 #define front_left 19
 #define back_left 11
@@ -162,35 +163,39 @@ void opcontrol() {
 
 		//MOVE ALL OF THESE INTO FUNCTIONS LATER
 
-		if (master.get_digital(DIGITAL_R2))
-		{
-			belt.move(85);
+		if (master.get_digital(DIGITAL_R2)){
+			pros::vision_object_s_t largest = vision_sensor.get_by_size(0);
+
+			//this may not work maybe change this to something based of codes??? read the docs lmao
+
+			if (largest.signature == 1)
+			{
+				belt.move(127);
+			}
+			else {
+				belt.move(85);
+			}
+				
 		}
-		else if (master.get_digital(DIGITAL_A))
-		{
+		else if (master.get_digital(DIGITAL_A)){
 			belt.move(-85);
 		}
-		else
-		{
+		else{
 			belt.brake();
 		}
 
 
-		if (master.get_digital(DIGITAL_R1))
-		{
+		if (master.get_digital(DIGITAL_R1)){
 			intake.move(-127);
 		}
-		else if (master.get_digital(DIGITAL_B))
-		{
+		else if (master.get_digital(DIGITAL_B)){
 			intake.move(127);
 		}
-		else
-		{
+		else{
 			intake.brake();
 		}
 
-		if (master.get_digital_new_press(DIGITAL_L2))
-		{
+		if (master.get_digital_new_press(DIGITAL_L2)){
 			net_piston.toggle();
 		}
 
