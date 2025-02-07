@@ -9,6 +9,8 @@
 #define belt_port -13
 #define intake_port 18
 
+#define vision_port 23
+
 double speed = 1;
 
 int i_time = 2000;
@@ -141,6 +143,7 @@ void autonomous() {
 void opcontrol() {
 
 	pros::adi::Pneumatics net_piston('h', true); 
+	pros::adi::Pneumatics corner_clear('g', true);
 
 	pros::MotorGroup left_mg ({front_left, back_left});    // Creates a motor group with forwards ports 10 and 20
 	pros::MotorGroup right_mg ({front_right, back_right});  // Creates a motor group with forwards port 1 and 11
@@ -151,6 +154,8 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);	// Creates a controller object for the master controller
 	
 	intake.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+
+	pros::Vision vision_sensor(vision_port);
 	
 
 	while (true) {
@@ -187,6 +192,10 @@ void opcontrol() {
 		if (master.get_digital_new_press(DIGITAL_L2))
 		{
 			net_piston.toggle();
+		}
+
+		if (master.get_digital_new_press(DIGITAL_L1)){
+			corner_clear.toggle();
 		}
 
 
