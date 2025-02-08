@@ -112,18 +112,17 @@ void autonomous() {
 
 	pros::MotorGroup left_mg ({front_left, back_left});
 	pros::MotorGroup right_mg ({front_right, back_right});
+	pros::MotorGroup full_mg ({front_left, back_left, front_right, back_right});
 	pros::Motor belt (belt_port);
 	pros::adi::Pneumatics net_piston('h', false); 
 	left_mg.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
 	right_mg.set_brake_mode_all(pros::E_MOTOR_BRAKE_COAST);
 
-	left_mg.move(-100);
-	right_mg.move(-100);
+	full_mg.move(-90);
 
-	pros::delay(650);
+	pros::delay(500);
 
-	left_mg.brake();
-	right_mg.brake();
+	full_mg.brake();
 
 	pros::delay(1000);
 
