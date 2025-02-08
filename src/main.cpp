@@ -171,10 +171,10 @@ void opcontrol() {
 		//MOVE ALL OF THESE INTO FUNCTIONS LATER
 
 		if (master.get_digital(DIGITAL_R2)){
-			belt.move(95);
+			belt.move(85);
 		}
 		else if (master.get_digital(DIGITAL_A)){
-			belt.move(-95);
+			belt.move(-85);
 		}
 		else{
 			belt.brake();
